@@ -5,7 +5,7 @@ import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (onInput)
 import Regex
-
+import Char exposing (isUpper, isLower, isDigit)
 
 
 -- MAIN
@@ -120,3 +120,7 @@ passwordUpperCaseValidation password =
     else
         div [style "color" "red"] [text "Password must contain uppercase character!"]
 
+passwordHasDigit: String -> Html msg
+passwordHasDigit password =
+        passwordList = toList password
+        
