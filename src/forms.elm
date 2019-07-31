@@ -4,9 +4,9 @@ import Browser
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (onInput)
-import Regex
 import Char exposing (isUpper, isLower, isDigit)
-
+import String exposing (toList)
+import List exposing (isEmpty, foldr)
 
 -- MAIN
 
@@ -83,6 +83,7 @@ viewValidation model =
         [ passwordMatchValidation model.password model.passwordAgain
         , passwordLengthValidation model.password
         , isAgeNumberValidation model.age
+        , passwordUppercaseValidation model.password
         ]
 
 
@@ -111,16 +112,10 @@ isAgeNumberValidation age =
     else
         div [style "color" "red"] [text "Age is not a number!"]
 
-passwordUpperCaseValidation : String -> Html msg
-passwordUpperCaseValidation password = 
-    pattern = Regex.regex "[A-Z]*"
-    if Regex.contains pattern password
-        div [style "color" "green"] [text "OK"]
-
-    else
-        div [style "color" "red"] [text "Password must contain uppercase character!"]
-
-passwordHasDigit: String -> Html msg
-passwordHasDigit password =
-        passwordList = toList password
-        
+passwordUppercaseValidation : String -> Html msg
+passwordUppercaseValidation password =
+    if isEmpty [List.map isUpper (toList password) ] then
+        div [ style "color" "green" ] [ text "OK"]
+    
+    else 
+        div [ style "color" "red"] [text "Password must contain at least one uppercase character"]
