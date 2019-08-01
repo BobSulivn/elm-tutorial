@@ -84,6 +84,7 @@ viewValidation model =
         , passwordLengthValidation model.password
         , isAgeNumberValidation model.age
         , passwordUppercaseValidation model.password
+        , passwordLowercaseValidation model.password
         ]
 
 
@@ -119,3 +120,11 @@ passwordUppercaseValidation password =
     
     else 
         div [ style "color" "red"] [text "Password must contain at least one uppercase character"]
+
+passwordLowercaseValidation : String -> Html msg
+passwordLowercaseValidation password =
+    if member True (List.map isLower (toList password)) then
+        div [ style "color" "green" ] [ text "OK"]
+    
+    else 
+        div [ style "color" "red"] [text "Password must contain at least one lowercase character!"]
