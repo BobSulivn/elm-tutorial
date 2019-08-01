@@ -6,7 +6,7 @@ import Html.Attributes exposing (..)
 import Html.Events exposing (onInput)
 import Char exposing (isUpper, isLower, isDigit)
 import String exposing (toList)
-import List exposing (isEmpty, foldr)
+import List exposing (member)
 
 -- MAIN
 
@@ -114,7 +114,7 @@ isAgeNumberValidation age =
 
 passwordUppercaseValidation : String -> Html msg
 passwordUppercaseValidation password =
-    if isEmpty [List.map isUpper (toList password) ] then
+    if member True (List.map isUpper (toList password)) then
         div [ style "color" "green" ] [ text "OK"]
     
     else 
