@@ -1,4 +1,4 @@
--- Testing .gitignore
+-- Testing .gitignore round 2
 module Main exposing (Model, Msg(..), init, main, passwordLengthValidation, passwordMatchValidation, update, view, viewInput, viewValidation)
 
 import Browser
