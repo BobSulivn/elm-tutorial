@@ -20,6 +20,7 @@ main =
 
 -- MODEL
 
+
 type alias Model =
     { name : String
     , password : String
@@ -62,7 +63,7 @@ update msg model =
             { model | age = age }
 
         Submit submit ->
-            { model | submit =  True }
+            { model | submit = submit }
 
 
 
@@ -76,7 +77,7 @@ view model =
         , viewInput "password" "Password" model.password Password
         , viewInput "password" "Re-enter Password" model.passwordAgain PasswordAgain
         , viewInput "text" "Age" model.age Age
-        , div [] [ button [ onClick (Submit True) ] [ text "Submit"] ]
+        , div [] [ button [ onClick (Submit True) ] [ text "Submit" ] ]
         , viewValidation model
         ]
 
@@ -84,6 +85,7 @@ view model =
 viewInput : String -> String -> String -> (String -> msg) -> Html msg
 viewInput t p v toMsg =
     input [ type_ t, placeholder p, value v, onInput toMsg ] []
+
 
 viewValidation : Model -> Html Msg
 viewValidation model =
@@ -96,16 +98,15 @@ viewValidation model =
             , passwordLowercaseValidation model.password
             , passwordDigitValidation model.password
             ]
+
     else
-        div [] [ text ""]
-
-
+        div [] [ text "" ]
 
 
 passwordMatchValidation : String -> String -> Html msg
 passwordMatchValidation password passwordAgain =
     if password == passwordAgain then
-        renderValidation "green" "OK" 
+        renderValidation "green" "OK"
 
     else
         renderValidation "red" "Passwords do not match!"
@@ -114,16 +115,16 @@ passwordMatchValidation password passwordAgain =
 passwordLengthValidation : String -> Html msg
 passwordLengthValidation password =
     if String.length password > 8 then
-        renderValidation "green" "OK" 
+        renderValidation "green" "OK"
 
     else
-        renderValidation "red"  "Password is not greater than 8 characters in length"
+        renderValidation "red" "Password is not greater than 8 characters in length"
 
 
 isAgeNumberValidation : String -> Html msg
 isAgeNumberValidation age =
     if Maybe.withDefault 0 (String.toInt age) > 0 then
-        renderValidation "green" "OK" 
+        renderValidation "green" "OK"
 
     else
         renderValidation "red" "Age is not a number!"
@@ -132,16 +133,16 @@ isAgeNumberValidation age =
 passwordUppercaseValidation : String -> Html msg
 passwordUppercaseValidation password =
     if member True (List.map isUpper (toList password)) then
-        renderValidation "green" "OK" 
+        renderValidation "green" "OK"
 
     else
-        renderValidation "red" "Password must contain at least one uppercase character" 
+        renderValidation "red" "Password must contain at least one uppercase character"
 
 
 passwordLowercaseValidation : String -> Html msg
 passwordLowercaseValidation password =
     if member True (List.map isLower (toList password)) then
-        renderValidation "green" "OK" 
+        renderValidation "green" "OK"
 
     else
         renderValidation "red" "Password must contain at least one lowercase character!"
@@ -150,10 +151,11 @@ passwordLowercaseValidation password =
 passwordDigitValidation : String -> Html msg
 passwordDigitValidation password =
     if member True (List.map isDigit (toList password)) then
-        renderValidation "green" "OK" 
+        renderValidation "green" "OK"
 
     else
         renderValidation "red" "Password must contain at least one number!"
+
 
 renderValidation : String -> String -> Html msg
 renderValidation textColor validationText =
