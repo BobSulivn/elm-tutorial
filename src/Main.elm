@@ -42,7 +42,8 @@ update msg model =
             model - 1
 
         Reset ->
-            init 
+            init
+
 
 
 -- VIEW
@@ -55,5 +56,5 @@ view model =
         , div [] [ text (String.fromInt model) ]
         , button [ onClick Increment ] [ text "+" ]
         , div [] [ text "" ]
-        , button [ onClick Reset ] [ text "Reset"]
+        , button [ onClick Reset ] [ text "Reset" ]
         ]

@@ -1,12 +1,14 @@
 module Main exposing (Model, Msg(..), init, main, passwordLengthValidation, passwordMatchValidation, update, view, viewInput, viewValidation)
 
 import Browser
+import Char exposing (isDigit, isLower, isUpper)
 import Html exposing (..)
 import Html.Attributes exposing (..)
-import Html.Events exposing (onInput)
-import Char exposing (isUpper, isLower, isDigit)
-import String exposing (toList)
+import Html.Events exposing (onClick, onInput)
 import List exposing (member)
+import String exposing (toList)
+
+
 
 -- MAIN
 
@@ -18,18 +20,18 @@ main =
 
 -- MODEL
 
-
 type alias Model =
     { name : String
     , password : String
     , passwordAgain : String
-    , age : String 
+    , age : String
+    , submit : Bool
     }
 
 
 init : Model
 init =
-    Model "" "" "" "" 
+    Model "" "" "" "" False
 
 
 
@@ -41,6 +43,8 @@ type Msg
     | Password String
     | PasswordAgain String
     | Age String
+    | Submit Bool
+
 
 update : Msg -> Model -> Model
 update msg model =
@@ -57,6 +61,10 @@ update msg model =
         Age age ->
             { model | age = age }
 
+        Submit submit ->
+            { model | submit =  True }
+
+
 
 -- VIEW
 
@@ -67,7 +75,8 @@ view model =
         [ viewInput "text" "Name" model.name Name
         , viewInput "password" "Password" model.password Password
         , viewInput "password" "Re-enter Password" model.passwordAgain PasswordAgain
-        , viewInput "text"  "Age" model.age Age
+        , viewInput "text" "Age" model.age Age
+        , div [] [ button [ onClick (Submit True) ] [ text "Submit"] ]
         , viewValidation model
         ]
 
@@ -76,17 +85,21 @@ viewInput : String -> String -> String -> (String -> msg) -> Html msg
 viewInput t p v toMsg =
     input [ type_ t, placeholder p, value v, onInput toMsg ] []
 
-
 viewValidation : Model -> Html Msg
 viewValidation model =
-    div []
-        [ passwordMatchValidation model.password model.passwordAgain
-        , passwordLengthValidation model.password
-        , isAgeNumberValidation model.age
-        , passwordUppercaseValidation model.password
-        , passwordLowercaseValidation model.password
-        , passwordDigitValidation model.password
-        ]
+    if model.submit == True then
+        div []
+            [ passwordMatchValidation model.password model.passwordAgain
+            , passwordLengthValidation model.password
+            , isAgeNumberValidation model.age
+            , passwordUppercaseValidation model.password
+            , passwordLowercaseValidation model.password
+            , passwordDigitValidation model.password
+            ]
+    else
+        div [] [ text ""]
+
+
 
 
 passwordMatchValidation : String -> String -> Html msg
@@ -106,34 +119,38 @@ passwordLengthValidation password =
     else
         div [ style "color" "red" ] [ text "Password is not greater than 8 characters in length" ]
 
+
 isAgeNumberValidation : String -> Html msg
 isAgeNumberValidation age =
-    if  (Maybe.withDefault 0 (String.toInt age) > 0) then
-        div [ style "color" "green" ] [ text "OK"]
-    
+    if Maybe.withDefault 0 (String.toInt age) > 0 then
+        div [ style "color" "green" ] [ text "OK" ]
+
     else
-        div [style "color" "red"] [text "Age is not a number!"]
+        div [ style "color" "red" ] [ text "Age is not a number!" ]
+
 
 passwordUppercaseValidation : String -> Html msg
 passwordUppercaseValidation password =
     if member True (List.map isUpper (toList password)) then
-        div [ style "color" "green" ] [ text "OK"]
-    
-    else 
-        div [ style "color" "red"] [text "Password must contain at least one uppercase character"]
+        div [ style "color" "green" ] [ text "OK" ]
+
+    else
+        div [ style "color" "red" ] [ text "Password must contain at least one uppercase character" ]
+
 
 passwordLowercaseValidation : String -> Html msg
 passwordLowercaseValidation password =
     if member True (List.map isLower (toList password)) then
-        div [ style "color" "green" ] [ text "OK"]
-    
-    else 
-        div [ style "color" "red"] [text "Password must contain at least one lowercase character!"]
+        div [ style "color" "green" ] [ text "OK" ]
+
+    else
+        div [ style "color" "red" ] [ text "Password must contain at least one lowercase character!" ]
+
 
 passwordDigitValidation : String -> Html msg
 passwordDigitValidation password =
     if member True (List.map isDigit (toList password)) then
-        div [ style "color" "green"] [ text "OK"]
-    
+        div [ style "color" "green" ] [ text "OK" ]
+
     else
-        div [ style "color" "red"] [ text "Password must contain at least one number!"]
+        div [ style "color" "red" ] [ text "Password must contain at least one number!" ]
