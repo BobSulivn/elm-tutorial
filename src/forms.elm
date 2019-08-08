@@ -105,52 +105,56 @@ viewValidation model =
 passwordMatchValidation : String -> String -> Html msg
 passwordMatchValidation password passwordAgain =
     if password == passwordAgain then
-        div [ style "color" "green" ] [ text "OK" ]
+        renderValidation "green" "OK" 
 
     else
-        div [ style "color" "red" ] [ text "Passwords do not match!" ]
+        renderValidation "red" "Passwords do not match!"
 
 
 passwordLengthValidation : String -> Html msg
 passwordLengthValidation password =
     if String.length password > 8 then
-        div [ style "color" "green" ] [ text "OK" ]
+        renderValidation "green" "OK" 
 
     else
-        div [ style "color" "red" ] [ text "Password is not greater than 8 characters in length" ]
+        renderValidation "red"  "Password is not greater than 8 characters in length"
 
 
 isAgeNumberValidation : String -> Html msg
 isAgeNumberValidation age =
     if Maybe.withDefault 0 (String.toInt age) > 0 then
-        div [ style "color" "green" ] [ text "OK" ]
+        renderValidation "green" "OK" 
 
     else
-        div [ style "color" "red" ] [ text "Age is not a number!" ]
+        renderValidation "red" "Age is not a number!"
 
 
 passwordUppercaseValidation : String -> Html msg
 passwordUppercaseValidation password =
     if member True (List.map isUpper (toList password)) then
-        div [ style "color" "green" ] [ text "OK" ]
+        renderValidation "green" "OK" 
 
     else
-        div [ style "color" "red" ] [ text "Password must contain at least one uppercase character" ]
+        renderValidation "red" "Password must contain at least one uppercase character" 
 
 
 passwordLowercaseValidation : String -> Html msg
 passwordLowercaseValidation password =
     if member True (List.map isLower (toList password)) then
-        div [ style "color" "green" ] [ text "OK" ]
+        renderValidation "green" "OK" 
 
     else
-        div [ style "color" "red" ] [ text "Password must contain at least one lowercase character!" ]
+        renderValidation "red" "Password must contain at least one lowercase character!"
 
 
 passwordDigitValidation : String -> Html msg
 passwordDigitValidation password =
     if member True (List.map isDigit (toList password)) then
-        div [ style "color" "green" ] [ text "OK" ]
+        renderValidation "green" "OK" 
 
     else
-        div [ style "color" "red" ] [ text "Password must contain at least one number!" ]
+        renderValidation "red" "Password must contain at least one number!"
+
+renderValidation : String -> String -> Html msg
+renderValidation textColor validationText =
+    div [ style "color" textColor ] [ text validationText ]
